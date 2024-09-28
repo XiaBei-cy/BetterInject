@@ -17,7 +17,6 @@
 
 #include <dirent.h>
 
-package_name
 
 const char *package_name = "com.mobirix.zombiefire";
 
