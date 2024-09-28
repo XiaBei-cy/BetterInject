@@ -1,52 +1,59 @@
-# Introduction
-![GitHub](https://img.shields.io/github/license/LGLTeam/Android-Mod-Menu?style=flat-square)
 
-Floating mod menu for il2cpp and other native android games. Server.Sources.KittyMemory, MSHook, Server.Sources.And64InlineHook and basic string obfuscator (AY obfuscator) included. Assets are stored as base64 in cpp and does not need to be stored under assets folder.
+# Better Inject
 
-Support Android 4.4.x up to Android S Preview. ARMv7, x86 and ARM64 architecture supported.
+Android Shared Library Mod Injector (Ptrace).
 
-![](https://i.imgur.com/zeumkBG.gif)
+### Support:
+- Android 5 ~ 14
+- ABI arm, arm64, x86, x86_64
+- Emulator Support (libhoudini.so or libndk_translation.so)
+- Bypass android linker namespace restrictions
+- memfd dlopen support
+- Auto launch
 
-# Known bug
-- Spinner does not show on some devices running Android 11. Should work again on Android 12
-- On some games, menu is using old layout such as Kitkat or Gingerbread when launched without permission. We have not found a way to fix it.
+### How To use
 
-# Download
-Download this repo as ZIP, or clone using any git tools
+Edit the ```package_name``` in ```Client/Client.cpp``` as per your need
 
-Or download Releases here https://github.com/LGLTeam/Android-Mod-Menu/releases
+Add ``Features List`` in ```Client/Client.cpp```
+and Add ```mods``` in ```Server/Server.cpp```. Also you can follow all wiki lie ```LGL Mod Menu``` but, you have to put ```cases``` in ```Server/Server.cpp```
 
-# Getting started
-**Go to this Wiki page to start reading:**
 
-https://github.com/LGLTeam/Android-Mod-Menu/wiki
+For JavaVM support, you can add following code to ```Server/Server.cpp```
 
-# Help, Support, FAQ
+```cpp
+extern "C" jint JNIEXPORT JNI_OnLoad(JavaVM* vm, void *key)
+{
+    // key 1337 is passed by injector
+    if (key != (void*)1337)
+        return JNI_VERSION_1_6;
 
-See: [Frequently Asked Questions (FAQ)](https://github.com/LGLTeam/Android-Mod-Menu/wiki/FAQ) where common questions are answered.
+    KITTY_LOGI("JNI_OnLoad called by injector.");
 
-If you have installation or usage problems, try asking your questions on the forum sites, [Platinmods](https://platinmods.com/forums/modding-questions-discussions.11/), or [UnknownCheats](https://www.unknowncheats.me/forum/android/) or others.
+    JNIEnv *env = nullptr;
+    if (vm->GetEnv((void**)&env, JNI_VERSION_1_6) == JNI_OK)
+    {
+        KITTY_LOGI("JavaEnv: %p.", env);
+        // ...
+    }
+    
+    std::thread(thread_function).detach();
+    
+    return JNI_VERSION_1_6;
+}
+```
 
-For example, if you have an issue with Hooking and game crashes, you should go to the **support forums**. Here there are no teachers who can help you with such issues.
-
-Issues are disabled permanently due to peoples who have no mind (mostly newbies) aren't even able to fill proper issue templates nor are they able to read the instructions. I get so many useless issues, even useless pull-requests.
-
-As a result, the contact infomation has been removed as well. However you can find me in our Telegram channel. I will only talk to peoples who are very skilled, have proper brain and have patience! I will BLOCK if I feel like you are annoying, disrespectful and acting like a kid
+YOU MUST HAVE ANDROID STUDIO TO BUILD THE PROJECT, LATER I WILL FIX THE BUILD FOR AIDE.
 
 # Credits
-Thanks to the following individuals whose code helped me develop this mod menu
+- ```Android Mod Menu```: https://github.com/LGLTeam/Android-Mod-Menu
+- ```AndKittyInjector```: https://github.com/MJx0/AndKittyInjector
+- ```KittyMemory```: https://github.com/MJx0/KittyMemory
+- ```SubstraceHook```: https://github.com/Octowolve/Substrate-Hooking-Example
+- ```And64inlineHook```: https://github.com/Rprop/And64InlineHook
 
-* Octowolve/Escanor - Mod menu: https://github.com/z3r0Sec/Server.Sources.Substrate-Template-With-Mod-Menu and Hooking: https://github.com/z3r0Sec/Server.Sources.Substrate-Hooking-Example
-* VanHoevenTR - Mod menu - https://github.com/LGLTeam/VanHoevenTR_Android_Mod_Menu
-* MrIkso - First mod menu template https://github.com/MrIkso/FloatingModMenu
-* MJx0 A.K.A Ruit - https://github.com/MJx0/Server.Sources.KittyMemory
-* Rprop - https://github.com/Rprop/Server.Sources.And64InlineHook
-* And everyone else who provided input and contributions to this project!
 
-# License
-**GNU General Public License 3**
+## Authors
 
-# Disclaimer
-This project is for Educational Use only. We do not condone this project being used to gain an advantage against other people. This project was made for fun
+- [@nepmods](https://www.github.com/nepmods)
 
-While commecial use/selling is allowed, we still strongly refrain you from buying any source codes on Telegram even if the author can be trusted, there is always a risk getting scammed. We will not be responsible for that. This project is always FREE to use
